@@ -17,6 +17,53 @@
     <meta property="og:type" content="website" />
     <link rel="icon" type="image/png" href="logo_chopper_fav.png" />
     <link rel="stylesheet" href="style.css" />
+    
+    <style>
+      /* Estilos para la funcionalidad del formulario y validaciones */
+      .submit-btn.loading .label-default { display: none; }
+      .submit-btn.loading .label-loading { display: inline; }
+      .label-loading { display: none; }
+      
+      .form-result { 
+        margin-top: 1rem; 
+        font-weight: 500; 
+        font-size: 0.9rem; 
+        padding: 12px; 
+        border-radius: 6px; 
+        display: none; 
+        line-height: 1.4;
+      }
+      .form-result.active { display: block; }
+      .form-result.success { 
+        background: rgba(74, 222, 128, 0.1); 
+        color: #4ade80; 
+        border: 1px solid rgba(74, 222, 128, 0.2); 
+      }
+      .form-result.error { 
+        background: rgba(248, 113, 113, 0.1); 
+        color: #f87171; 
+        border: 1px solid rgba(248, 113, 113, 0.2); 
+      }
+      
+      .field-error { color: #f87171; font-size: 0.75rem; margin-top: 4px; display: block; min-height: 1.2em; }
+      
+      /* Honeypot: Invisible para humanos, trampa para bots */
+      .hidden-field {
+        opacity: 0;
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 0;
+        width: 0;
+        z-index: -1;
+        pointer-events: none;
+      }
+      
+      /* Mejoras visuales para campos inválidos */
+      input[aria-invalid="true"], select[aria-invalid="true"], textarea[aria-invalid="true"] {
+        border-color: #f87171;
+      }
+    </style>
   </head>
   <body>
     <a class="skip-link" href="#contenido">Saltar al contenido</a>
@@ -163,9 +210,7 @@
         <h2 id="cta-title">Coordinemos una charla breve y definimos una hoja de ruta concreta.</h2>
         <p>Queda preparado para agenda por WhatsApp o por correo, según tu canal preferido.</p>
         <div class="cta-actions">
-          <a class="btn btn-primary" href="https://wa.me/5492645859829" target="_blank" rel="noopener noreferrer"
-            >Agendar por WhatsApp</a
-          >
+          <a class="btn btn-primary" href="#contacto">Quiero una propuesta</a>
           <a class="btn btn-ghost btn-dark" href="mailto:hola@chopperdigital.com">Escribir por correo</a>
         </div>
       </section>
@@ -181,9 +226,7 @@
                 <a href="https://instagram.com/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
                   <span class="social-icon" aria-hidden="true">
                     <svg viewBox="0 0 24 24" width="18" height="18" focusable="false">
-                      <path
-                        d="M7 3h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4Zm0 2a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H7Zm10.5 1.5a1 1 0 1 1 0 2 1 1 0 0 1 0-2ZM12 8a4 4 0 1 1 0 8 4 4 0 0 1 0-8Zm0 2a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z"
-                      />
+                      <path d="M7 3h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4Zm0 2a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H7Zm10.5 1.5a1 1 0 1 1 0 2 1 1 0 0 1 0-2ZM12 8a4 4 0 1 1 0 8 4 4 0 0 1 0-8Zm0 2a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z" />
                     </svg>
                   </span>
                   <span>Instagram</span>
@@ -193,9 +236,7 @@
                 <a href="https://wa.me/5492645859829" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
                   <span class="social-icon" aria-hidden="true">
                     <svg viewBox="0 0 24 24" width="18" height="18" focusable="false">
-                      <path
-                        d="M12 2a10 10 0 0 0-8.74 14.85L2 22l5.3-1.24A10 10 0 1 0 12 2Zm0 2a8 8 0 0 1 6.8 12.22l-.28.43.73 3.05-3-.7-.44.25A8 8 0 1 1 12 4Zm-3.2 4.7c-.24 0-.46.12-.6.32-.33.47-.82 1.24-.82 2.12 0 .95.52 1.88.6 2 .09.13 1.63 2.6 4.03 3.54 2 .78 2.4.62 2.83.58.43-.04 1.38-.56 1.57-1.1.2-.54.2-1 .14-1.1-.06-.1-.23-.15-.48-.28-.25-.13-1.48-.73-1.7-.82-.22-.08-.39-.12-.55.13-.16.24-.64.82-.79.99-.14.16-.28.18-.52.06-.24-.13-1-.37-1.9-1.19a7.08 7.08 0 0 1-1.3-1.61c-.14-.24-.02-.37.1-.5.1-.1.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.43-.06-.13-.55-1.35-.76-1.84-.2-.48-.4-.42-.55-.43h-.48Z"
-                      />
+                      <path d="M12 2a10 10 0 0 0-8.74 14.85L2 22l5.3-1.24A10 10 0 1 0 12 2Zm0 2a8 8 0 0 1 6.8 12.22l-.28.43.73 3.05-3-.7-.44.25A8 8 0 1 1 12 4Zm-3.2 4.7c-.24 0-.46.12-.6.32-.33.47-.82 1.24-.82 2.12 0 .95.52 1.88.6 2 .09.13 1.63 2.6 4.03 3.54 2 .78 2.4.62 2.83.58.43-.04 1.38-.56 1.57-1.1.2-.54.2-1 .14-1.1-.06-.1-.23-.15-.48-.28-.25-.13-1.48-.73-1.7-.82-.22-.08-.39-.12-.55.13-.16.24-.64.82-.79.99-.14.16-.28.18-.52.06-.24-.13-1-.37-1.9-1.19a7.08 7.08 0 0 1-1.3-1.61c-.14-.24-.02-.37.1-.5.1-.1.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.43-.06-.13-.55-1.35-.76-1.84-.2-.48-.4-.42-.55-.43h-.48Z" />
                     </svg>
                   </span>
                   <span>WhatsApp</span>
@@ -205,9 +246,7 @@
                 <a href="https://facebook.com/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
                   <span class="social-icon" aria-hidden="true">
                     <svg viewBox="0 0 24 24" width="18" height="18" focusable="false">
-                      <path
-                        d="M13.5 3a4.5 4.5 0 0 0-4.5 4.5V10H7v3h2v8h3v-8h2.3l.7-3H12V7.8c0-1 .3-1.8 1.8-1.8H15V3h-1.5Z"
-                      />
+                      <path d="M13.5 3a4.5 4.5 0 0 0-4.5 4.5V10H7v3h2v8h3v-8h2.3l.7-3H12V7.8c0-1 .3-1.8 1.8-1.8H15V3h-1.5Z" />
                     </svg>
                   </span>
                   <span>Facebook</span>
@@ -217,6 +256,11 @@
           </div>
 
           <form class="contact-form reveal" style="--d: 90ms" id="lead-form" novalidate>
+            <!-- HONEYPOT: Campo trampa -->
+            <div class="hidden-field" aria-hidden="true">
+              <input type="text" name="honeypot" tabindex="-1" autocomplete="off" placeholder="No completar">
+            </div>
+
             <div class="status-box" id="form-empty" role="status">Completá los campos y elegí canal de respuesta.</div>
 
             <div class="field">
@@ -261,7 +305,7 @@
 
             <button class="btn btn-primary submit-btn" type="submit">
               <span class="label-default">Enviar consulta</span>
-              <span class="label-loading" aria-hidden="true">Preparando mensaje...</span>
+              <span class="label-loading" aria-hidden="true">Enviando datos...</span>
             </button>
 
             <p class="form-result" id="form-result" aria-live="polite"></p>

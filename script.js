@@ -2,6 +2,10 @@
   const qs = (s, p = document) => p.querySelector(s);
   const qsa = (s, p = document) => [...p.querySelectorAll(s)];
 
+  // --- CONFIGURACIÓN DE N8N ---
+  // IMPORTANTE: Reemplaza con tu URL de webhook de n8n
+  const N8N_WEBHOOK_URL = "https://n8n.chopperdigital.online/webhook/contacto";
+
   const nav = qs('#menu');
   const menuBtn = qs('#menu-btn');
   const revealItems = qsa('.reveal');
@@ -12,6 +16,7 @@
 
   if (yearNode) yearNode.textContent = String(new Date().getFullYear());
 
+  // Lógica de Menú Móvil (Original)
   if (menuBtn && nav) {
     menuBtn.addEventListener('click', () => {
       const expanded = menuBtn.getAttribute('aria-expanded') === 'true';
@@ -27,6 +32,7 @@
     });
   }
 
+  // Scroll Suave (Original)
   qsa('a[href^="#"]').forEach((anchor) => {
     anchor.addEventListener('click', (event) => {
       const id = anchor.getAttribute('href');
@@ -38,6 +44,7 @@
     });
   });
 
+  // Animaciones Reveal (Original)
   if ('IntersectionObserver' in window) {
     const io = new IntersectionObserver(
       (entries) => {
@@ -55,6 +62,7 @@
     revealItems.forEach((el) => el.classList.add('is-visible'));
   }
 
+  // --- LÓGICA DE FORMULARIO MEJORADA ---
   if (!form) return;
 
   const submitBtn = qs('.submit-btn', form);
@@ -65,7 +73,8 @@
     nombre: qs('#nombre', form),
     email: qs('#email', form),
     sector: qs('#sector', form),
-    mensaje: qs('#mensaje', form)
+    mensaje: qs('#mensaje', form),
+    honeypot: qs('input[name="honeypot"]', form)
   };
 
   const errorMap = {
@@ -76,10 +85,10 @@
   };
 
   const validators = {
-    nombre: (value) => (value.trim().length >= 3 ? '' : 'Ingresá al menos 3 caracteres.'),
+    nombre: (value) => (value.trim().length >= 3 ? '' : 'Ingresá tu nombre completo.'),
     email: (value) => (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) ? '' : 'Ingresá un correo válido.'),
     sector: (value) => (value ? '' : 'Seleccioná un sector.'),
-    mensaje: (value) => (value.trim().length >= 16 ? '' : 'Contanos un poco más (mínimo 16 caracteres).')
+    mensaje: (value) => (value.trim().length >= 10 ? '' : 'Contanos un poco más sobre tu necesidad.')
   };
 
   const setError = (key, message) => {
@@ -91,6 +100,7 @@
   };
 
   const validateField = (key) => {
+    if (key === 'honeypot') return true;
     const field = fields[key];
     if (!field) return true;
     const msg = validators[key](field.value);
@@ -98,7 +108,9 @@
     return !msg;
   };
 
+  // Listeners para validación en tiempo real
   Object.keys(fields).forEach((key) => {
+    if (key === 'honeypot') return;
     fields[key].addEventListener('blur', () => validateField(key));
     fields[key].addEventListener('input', () => {
       if (errorMap[key]?.textContent) validateField(key);
@@ -118,50 +130,74 @@
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
 
-    const isValid = Object.keys(fields).every(validateField);
+    // 1. Antispam Honeypot
+    if (fields.honeypot.value.trim() !== "") {
+      console.warn("Spam detectado.");
+      formResult.textContent = '¡Gracias! Tu consulta ha sido procesada.';
+      formResult.className = 'form-result active success';
+      form.reset();
+      return;
+    }
+
+    // 2. Validación
+    const isValid = ['nombre', 'email', 'sector', 'mensaje'].every(validateField);
     if (!isValid) {
       if (formResult) {
-        formResult.style.color = '#b32222';
         formResult.textContent = 'Revisá los campos marcados para continuar.';
+        formResult.className = 'form-result active error';
       }
       return;
     }
 
     setLoading(true);
+    formResult.classList.remove('active');
 
-    const data = new FormData(form);
-    const nombre = String(data.get('nombre') || '').trim();
-    const email = String(data.get('email') || '').trim();
-    const sector = String(data.get('sector') || '').trim();
-    const mensaje = String(data.get('mensaje') || '').trim();
-    const canal = String(data.get('canal') || 'whatsapp').trim();
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+    delete data.honeypot; // No enviamos la trampa a n8n
 
-    const body = [
-      'Hola Chopper, quiero avanzar con una propuesta.',
-      `Nombre: ${nombre}`,
-      `Correo: ${email}`,
-      `Sector: ${sector}`,
-      `Necesidad: ${mensaje}`
-    ].join('\n');
+    try {
+      // 3. Envío a n8n
+      const response = await fetch(N8N_WEBHOOK_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...data,
+          metadata: {
+            source: window.location.hostname,
+            timestamp: new Date().toLocaleString('es-AR')
+          }
+        })
+      });
 
-    await new Promise((resolve) => setTimeout(resolve, 820));
+      if (!response.ok) throw new Error("Error en el servidor");
 
-    if (formResult) {
-      formResult.style.color = '#1b5a2f';
-      formResult.textContent = 'Perfecto. Te abrimos el canal que seleccionaste.';
+      // 4. Éxito y Redirección
+      if (formResult) {
+        formResult.textContent = '¡Excelente! Recibimos tu consulta con éxito.';
+        formResult.className = 'form-result active success';
+      }
+
+      // Si es WhatsApp, abrimos el canal después de un breve delay
+      if (data.canal === 'whatsapp') {
+        const body = `Hola Chopper! Soy ${data.nombre}. Quiero avanzar con una propuesta para el sector ${data.sector}. Necesidad: ${data.mensaje}`;
+        const phone = '5492645859829';
+        setTimeout(() => {
+          window.open(`https://wa.me/${phone}?text=${encodeURIComponent(body)}`, '_blank', 'noopener,noreferrer');
+        }, 1200);
+      }
+
+      form.reset();
+      Object.keys(errorMap).forEach(key => setError(key, ''));
+      if (emptyState) emptyState.style.display = 'block';
+
+    } catch (error) {
+      if (formResult) {
+        formResult.textContent = 'Hubo un problema al enviar. Por favor, intentá por WhatsApp directamente.';
+        formResult.className = 'form-result active error';
+      }
+    } finally {
+      setLoading(false);
     }
-
-    if (canal === 'email') {
-      const subject = encodeURIComponent('Consulta comercial - Chopper Desarrollos Digitales');
-      window.location.href = `mailto:hola@chopperdigital.com?subject=${subject}&body=${encodeURIComponent(body)}`;
-    } else {
-      const phone = '5492645859829';
-      window.open(`https://wa.me/${phone}?text=${encodeURIComponent(body)}`, '_blank', 'noopener,noreferrer');
-    }
-
-    form.reset();
-    Object.keys(fields).forEach((key) => setError(key, ''));
-    if (emptyState) emptyState.style.display = 'block';
-    setLoading(false);
   });
 })();
