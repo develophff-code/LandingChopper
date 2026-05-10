@@ -1,0 +1,51 @@
+@import "tailwindcss";
+@config "../tailwind.config.js";
+
+@layer base {
+  body {
+      background: radial-gradient(circle at center, #010A1A 0%, #000105 100%);
+      color: #d8e3fa;
+      scroll-behavior: smooth;
+  }
+}
+
+@layer components {
+  .glass-panel {
+      background: rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(0, 219, 231, 0.2);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  }
+  .glass-card {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(40px);
+      border: 1px solid rgba(121, 255, 248, 0.3);
+      transition: all 0.3s ease;
+  }
+  .glass-card:hover {
+      border-color: #00dbe7;
+      box-shadow: 0 0 20px rgba(0, 219, 231, 0.4);
+      transform: translateY(-4px);
+  }
+}
+
+@layer utilities {
+  .neon-accent { color: #79FFF8; }
+  .neon-glow { text-shadow: 0 0 10px rgba(0, 219, 231, 0.6); }
+  .data-line {
+      position: absolute;
+      left: 20px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, transparent, #00dbe7 20%, #79FFF8 80%, transparent);
+      opacity: 0.3;
+  }
+  .btn-pulse { animation: pulse-neon 2s infinite; }
+}
+
+@keyframes pulse-neon {
+  0% { box-shadow: 0 0 5px rgba(0, 219, 231, 0.4); }
+  50% { box-shadow: 0 0 20px rgba(0, 219, 231, 0.8); }
+  100% { box-shadow: 0 0 5px rgba(0, 219, 231, 0.4); }
+}
