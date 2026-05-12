@@ -12,11 +12,11 @@ const Header = () => {
         
         {/* Desktop Nav */}
         <nav className="hidden md:flex gap-lg items-center">
-          <a className="text-secondary font-bold border-b-2 border-secondary pb-1 hover:text-primary transition-all duration-300" href="#soluciones">
-            Soluciones
+          <a className="text-secondary font-bold border-b-2 border-secondary pb-1 hover:text-primary transition-all duration-300" href="#hero">
+            Inicio
           </a>
-          <a className="text-on-surface-variant font-label-sm hover:text-primary transition-all duration-300" href="#servicios">
-            Servicios
+          <a className="text-on-surface-variant font-label-sm hover:text-primary transition-all duration-300" href="#soluciones">
+            Soluciones
           </a>
           <a className="text-on-surface-variant font-label-sm hover:text-primary transition-all duration-300" href="#testimonios">
             Testimonios
@@ -40,11 +40,11 @@ const Header = () => {
       {/* Mobile Nav Overlay */}
       {isMenuOpen && (
         <div className="md:hidden absolute top-20 left-0 w-full bg-surface-container-highest border-b border-secondary/30 shadow-lg flex flex-col p-lg">
-          <a onClick={() => setIsMenuOpen(false)} className="text-secondary font-bold py-md border-b border-secondary/10 hover:text-primary transition-all" href="#soluciones">
-            Soluciones
+          <a onClick={() => setIsMenuOpen(false)} className="text-secondary font-bold py-md border-b border-secondary/10 hover:text-primary transition-all" href="#hero">
+            Inicio
           </a>
-          <a onClick={() => setIsMenuOpen(false)} className="text-on-surface-variant font-bold py-md border-b border-secondary/10 hover:text-primary transition-all" href="#servicios">
-            Servicios
+          <a onClick={() => setIsMenuOpen(false)} className="text-on-surface-variant font-bold py-md border-b border-secondary/10 hover:text-primary transition-all" href="#soluciones">
+            Soluciones
           </a>
           <a onClick={() => setIsMenuOpen(false)} className="text-on-surface-variant font-bold py-md border-b border-secondary/10 hover:text-primary transition-all" href="#testimonios">
             Testimonios

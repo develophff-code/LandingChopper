@@ -3,7 +3,7 @@ import logo from '../logo_chopper_digital.png';
 
 const Hero = () => {
   return (
-    <section className="relative min-h-screen flex items-center pt-24 px-margin-mobile md:px-margin-desktop max-w-[1440px] mx-auto">
+    <section id="hero" className="relative min-h-screen flex items-center pt-24 px-margin-mobile md:px-margin-desktop max-w-[1440px] mx-auto">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-xl items-center w-full">
         <div className="space-y-lg z-10">
           <h1 className="font-display-xl text-display-xl leading-tight">
