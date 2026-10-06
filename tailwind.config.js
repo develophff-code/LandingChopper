@@ -1,3 +1,6 @@
+import forms from '@tailwindcss/forms';
+import containerQueries from '@tailwindcss/container-queries';
+
 /** @type {import('tailwindcss').Config} */
 export default {
   darkMode: "class",
@@ -60,7 +63,9 @@ export default {
           "DEFAULT": "0.125rem",
           "lg": "0.25rem",
           "xl": "0.5rem",
-          "full": "0.75rem"
+          "2xl": "1rem",
+          "3xl": "1.5rem",
+          "full": "9999px"
       },
       "spacing": {
           "xs": "4px",
@@ -72,6 +77,19 @@ export default {
           "sm": "8px",
           "margin-mobile": "16px",
           "unit": "4px"
+      },
+      "maxWidth": {
+          "xs": "20rem",
+          "sm": "24rem",
+          "md": "28rem",
+          "lg": "32rem",
+          "xl": "36rem",
+          "2xl": "42rem",
+          "3xl": "48rem",
+          "4xl": "56rem",
+          "5xl": "64rem",
+          "6xl": "72rem",
+          "7xl": "80rem"
       },
       "fontFamily": {
           "label-sm": ["Inter"],
@@ -94,7 +112,7 @@ export default {
   },
   },
   plugins: [
-    require('@tailwindcss/forms'),
-    require('@tailwindcss/container-queries')
+    forms,
+    containerQueries,
   ],
 }

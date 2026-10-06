@@ -2,10 +2,17 @@
 @config "../tailwind.config.js";
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+    overflow-x: hidden;
+  }
   body {
-      background: radial-gradient(circle at center, #010A1A 0%, #000105 100%);
-      color: #d8e3fa;
-      scroll-behavior: smooth;
+    background: radial-gradient(circle at 50% 20%, #041833 0%, #010A1A 50%, #000208 100%);
+    color: #d8e3fa;
+    overflow-x: hidden;
+    min-height: 100vh;
+    font-family: 'Inter', sans-serif;
   }
 }
 
